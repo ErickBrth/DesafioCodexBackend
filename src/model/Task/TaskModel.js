@@ -1,24 +1,14 @@
 const {Schema, model} = require('mongoose');
 
-const UserModel = new Schema({
+const TaskModel = new Schema({
         name: {
             type: String,
             required: true,
         },
-        email: {
+        priority: {
             type: String,
-            unique: true,
-            required: true,
-            match: /^\w+([.-]?\w+)*(@codexjr.com.br)+$/
-        },
-        passwordHash: {
-            type: String,
-            required: true,
-        },
-        is_enable: {
-            type: Boolean,
-            required: false,
-            default: false
+            enum: ['alta', 'baixa'],
+            required: true
         },
         code: {
             type: Number,
@@ -37,4 +27,4 @@ const UserModel = new Schema({
         timestamps: true,
     });
 
-module.exports = model('User', UserModel);
+module.exports = model('Task', TaskModel);

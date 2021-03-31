@@ -1,7 +1,8 @@
 class Task {
-    constructor(name, priority) {
+    constructor(name, priority, userId) {
         this.name = name;
         this.priority = priority;
+        this.userId = userId;
     }
 }
 

@@ -12,7 +12,7 @@ module.exports = {
         const {name, priority} = req.body;
 
         try {
-            const task = new Task(name, priority);
+            const task = new Task(name, priority, req.user.id);
             const result = await repository.create(task);
 
             res.status(201);
@@ -24,7 +24,7 @@ module.exports = {
     },
     listTasks: async (req, res, next) => {
         try {
-            const tasks = await repository.listAll();
+            const tasks = await repository.listAll(req.user.id);
             tasks.sort(sorting.sortTaskByPriority);
 
             res.status(200);
@@ -39,7 +39,7 @@ module.exports = {
         const id = req.params.id;
 
         try {
-            const taskDoc = await repository.findTaskById(id);
+            const taskDoc = await repository.findTaskById(id,req.user.id);
 
             if(taskDoc === null) {
                 throw new DataBaseError("Essa tarefa nao existe");
@@ -48,7 +48,7 @@ module.exports = {
             if(!name) name = taskDoc.name;
             if(!priority) priority = taskDoc.priority;
 
-            const task = new Task(name, priority);
+            const task = new Task(name, priority, req.user.id);
             await repository.updateTask(id, task);
             res.status(204);
             res.end();
@@ -60,7 +60,7 @@ module.exports = {
         const id = req.params.id;
 
         try {
-            await repository.deleteTask(id);
+            await repository.deleteTask(id, req.user.id);
             res.status(204);
             res.end();
         } catch (error) {

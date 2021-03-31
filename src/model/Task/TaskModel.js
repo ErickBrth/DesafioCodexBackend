@@ -10,6 +10,10 @@ const TaskModel = new Schema({
             enum: ['alta', 'baixa'],
             required: true
         },
+        userId: {
+            type: String,
+            require: true
+        },
         code: {
             type: Number,
             required: false,

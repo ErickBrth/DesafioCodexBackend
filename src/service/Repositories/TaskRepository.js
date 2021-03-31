@@ -7,18 +7,18 @@ module.exports = {
         const result = await instance.save();
         return result.toObject();
     },
-    listAll: async () => {
-        const result = await TaskModel.find();
+    listAll: async (userId) => {
+        const result = await TaskModel.find({userId:userId});
         return result.map(model => model.toObject());
     },
-    findTaskById: (id) => {
-        return TaskModel.findById(id);
+    findTaskById: (id, userId) => {
+        return TaskModel.findOne({_id:id,userId:userId});
     },
     updateTask: async (id, task) => {
         await TaskModel.updateOne({_id: id}, task, {runValidators: true})
     },
-    deleteTask: async (id) => {
-        const result = await TaskModel.deleteOne({_id: id});
+    deleteTask: async (id, userId) => {
+        const result = await TaskModel.deleteOne({_id: id, userId:userId});
         if(result.n === 0) {
             throw new DataBaseError("Essa tarefa nao existe");
         }

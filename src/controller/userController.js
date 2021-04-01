@@ -4,14 +4,14 @@ const passwordHelper = require('../util/helpers/passwordHelper.js');
 const AuthStrategies = require("../util/AuthStrategies.js");
 const BlackListRepository = require("../service/Repositories/BlacklistRepository.js");
 
-const { UserSerializer } = require('../Serializer');
+const { UserSerializer, TokenSerializer } = require('../Serializer');
 
 module.exports = {
     createUser: async (req, res, next) => {
         const {name, email, password} = req.body;
-        const passwordHash = await passwordHelper.hashPassword(password);
 
         try {
+            const passwordHash = await passwordHelper.hashPassword(password);
             const user = new User(name, email, passwordHash);
             const result = await UserRepository.save(user);
 
@@ -25,8 +25,14 @@ module.exports = {
     },
     login: (req, res, next) => {
         const token = AuthStrategies.createToken(req.user);
-        res.set('Authorization', token);
-        res.status(204).send();
+        const tokenObj = {
+            access_token: token,
+            token_type: "Bearer"
+        }
+
+        res.status(200);
+        const serializer = new TokenSerializer(res.getHeader('Content-Type'));
+        res.send(serializer.serialize(tokenObj));
     },
     logout: async(req, res, next) => {
         try {

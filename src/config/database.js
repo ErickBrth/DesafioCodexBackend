@@ -10,8 +10,6 @@ module.exports = () => {
         DB_URL = config.db.develop;
     }
 
-    console.log(DB_URL);
-
     mongoose.set('useFindAndModify', false);
 
     mongoose.connection.on('connected', () => {

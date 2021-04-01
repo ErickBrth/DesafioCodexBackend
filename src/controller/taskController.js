@@ -3,6 +3,7 @@ const Task = require('../model/Task/Task.js');
 const repository = require('../service/Repositories/TaskRepository.js');
 const DataBaseError = require("../util/errors/DataBaseError.js");
 const sorting = require("../util/helpers/sorting.js");
+const {InvalidArgumentError} = require("../util/errors");
 
 const { TaskSerializer } = require('../Serializer');
 
@@ -39,8 +40,12 @@ module.exports = {
         const id = req.params.id;
 
         try {
-            const taskDoc = await repository.findTaskById(id,req.user.id);
+            if(!name && !priority) {
+                throw new InvalidArgumentError("Campo name e priority estao vazios");
+            }
 
+            const taskDoc = await repository.findTaskById(id,req.user.id);
+            
             if(taskDoc === null) {
                 throw new DataBaseError("Essa tarefa nao existe");
             }

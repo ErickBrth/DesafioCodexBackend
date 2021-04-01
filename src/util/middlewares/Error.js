@@ -1,14 +1,10 @@
+const {ErrorSerializer} = require("../../Serializer");
+
 module.exports = app => {
     app.use((error, req, res, next) => {
-        if(error instanceof Error) {
-            res.status(404);
-        } else {
-            res.status(500);
-        }
-
-        res.send(JSON.stringify({
-            menssage: error.message
-        }));
+        res.status(400);
+        const serializer = new ErrorSerializer(res.getHeader('Content-Type'), ['message']);
+        res.send(serializer.serialize(error));
     });
 }
 

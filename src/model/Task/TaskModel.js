@@ -13,18 +13,6 @@ const TaskModel = new Schema({
         userId: {
             type: String,
             require: true
-        },
-        code: {
-            type: Number,
-            required: false,
-        },
-        token_list: {
-            type: [String]
-        },
-        id_fcm: {
-            type: String,
-            required: false,
-            default: null
         }
     },
     {

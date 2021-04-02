@@ -1,5 +1,5 @@
 const taskController = require('../controller/taskController.js')
-const {Auth}=require("../util/middlewares");
+const {Auth} = require("../util/middlewares");
 
 module.exports = app => {
     app.route('/tasks')

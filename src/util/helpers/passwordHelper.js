@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const validators = require("./validators.js");
-const {InvalidArgumentError} = require("../errors");
+const {WrongEmailOrPasswordError} = require("../errors");
 
 function validatePassword(password) {
     validators.fieldMinimumLength(password, "password", 8);
@@ -15,7 +15,7 @@ module.exports = {
     verifyPassword: async (hash, password) => {
         const validPassword = await bcrypt.compare(password, hash);
         if(!validPassword) {
-            throw new InvalidArgumentError("Senha ou email invalidos");
+            throw new WrongEmailOrPasswordError();
         }
     }
 }

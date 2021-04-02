@@ -25,7 +25,7 @@ passport.use(
     }, async (email, password, next) => {
         try {
             const user = await UserRepository.findByEmail(email);
-            await User.validateUser(user, password);
+            await User.authenticateUser(user, password);
             next(null, user);
         } catch (error) {
             next(error);

@@ -1,4 +1,4 @@
-const ContentTypeNotSupported = require('../util/errors/ContentTypeNotSupported.js');
+const ContentTypeNotSupported = require('../../util/errors/ContentTypeNotSupported.js');
 
 class Serializer {
     json(data) {

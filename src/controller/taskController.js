@@ -1,24 +1,30 @@
 const Task = require('../model/Task/Task.js');
-
 const repository = require('../service/Repositories/TaskRepository.js');
-const DataBaseError = require("../util/errors/DataBaseError.js");
 const sorting = require("../util/helpers/sorting.js");
-const {InvalidArgumentError} = require("../util/errors");
+const { TaskSerializer } = require('../service/Serializer');
 
-const { TaskSerializer } = require('../Serializer');
+function sendResponse(res, status, result) {
+    res.status(status);
+    const serializer = new TaskSerializer(res.getHeader('Content-Type'));
+    res.send(serializer.serialize(result));
+}
 
+function endResponse(res, status) {
+    res.status(status);
+    res.end();
+}
 
 module.exports = {
     createTask: async (req, res, next) => {
         const {name, priority} = req.body;
 
         try {
+            Task.validate(name, priority);
+
             const task = new Task(name, priority, req.user.id);
             const result = await repository.create(task);
 
-            res.status(201);
-            const serializer = new TaskSerializer(res.getHeader('Content-Type'));
-            res.send(serializer.serialize(result));
+            sendResponse(res, 201, result);
         } catch (error) {
             next(error);
         }
@@ -27,10 +33,7 @@ module.exports = {
         try {
             const tasks = await repository.listAll(req.user.id);
             tasks.sort(sorting.sortTaskByPriority);
-
-            res.status(200);
-            const serializer = new TaskSerializer(res.getHeader('Content-Type'));
-            res.send(serializer.serialize(tasks));
+            sendResponse(res, 200, tasks);
         } catch (error) {
             next(error);
         }
@@ -40,23 +43,17 @@ module.exports = {
         const id = req.params.id;
 
         try {
-            if(!name && !priority) {
-                throw new InvalidArgumentError("Campo name e priority estao vazios");
-            }
+            Task.validateUpdate(name, priority);
 
             const taskDoc = await repository.findTaskById(id,req.user.id);
-            
-            if(taskDoc === null) {
-                throw new DataBaseError("Essa tarefa nao existe");
-            }
 
             if(!name) name = taskDoc.name;
             if(!priority) priority = taskDoc.priority;
 
             const task = new Task(name, priority, req.user.id);
             await repository.updateTask(id, task);
-            res.status(204);
-            res.end();
+
+            endResponse(res, 204);
         } catch (error) {
             next(error);
         }
@@ -66,8 +63,7 @@ module.exports = {
 
         try {
             await repository.deleteTask(id, req.user.id);
-            res.status(204);
-            res.end();
+            endResponse(res, 204);
         } catch (error) {
             next(error);
         }

@@ -1,3 +1,4 @@
+const {EmptyFieldError} = require("../errors");
 const {InvalidArgumentError} = require("../errors");
 
 module.exports = {
@@ -6,6 +7,13 @@ module.exports = {
             throw new InvalidArgumentError(
                 `O campo ${name} precisa ser maior que ${minimum} caracteres`
             );
+        }
+    },
+    emptyField: (object) => {
+        for(let prop in object) {
+            if(!object[prop]) {
+                throw new EmptyFieldError(prop);
+            }
         }
     }
 }

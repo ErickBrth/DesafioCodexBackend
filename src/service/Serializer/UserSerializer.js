@@ -1,10 +1,10 @@
 const Serializer = require("./Serializer.js");
 
 class UserSerializer extends Serializer {
-    constructor(contentType, extraFields) {
+    constructor(contentType, extraFields = []) {
         super();
         this.contentType = contentType;
-        this.publicFields = ['_id', 'name', 'email'].concat(extraFields || []);
+        this.publicFields = ['_id', 'name', 'email'].concat(extraFields);
     }
 }
 

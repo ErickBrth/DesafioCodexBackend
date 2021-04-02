@@ -1,4 +1,4 @@
-const { SupportedContentTypes } = require('../../Serializer');
+const { SupportedContentTypes } = require('../../service/Serializer');
 
 module.exports = app => {
     app.use((req, res, next) => {

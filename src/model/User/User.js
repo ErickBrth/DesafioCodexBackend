@@ -1,5 +1,6 @@
 const passwordHelper = require("../../util/helpers/passwordHelper.js");
-const {InvalidArgumentError} = require("../../util/errors");
+const validator = require("../../util/helpers/validators.js");
+const {WrongEmailOrPasswordError} = require("../../util/errors");
 
 class User {
     constructor(name, email, passwordHash, id = null) {
@@ -9,9 +10,17 @@ class User {
         this.id = id;
     }
 
-    static async validateUser(user, password) {
+    static validate(name, email, password) {
+        validator.emptyField({
+            name: name,
+            email: email,
+            password: password
+        });
+    }
+
+    static async authenticateUser(user, password) {
         if(!user) {
-            throw new InvalidArgumentError("Email ou senha invalido");
+            throw new WrongEmailOrPasswordError();
         }
         await passwordHelper.verifyPassword(user.passwordHash, password);
     }

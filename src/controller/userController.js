@@ -31,8 +31,9 @@ module.exports = {
         } catch (error) {
             if(error.code === 11000) {
                 next(new DuplicatedEmailError());
+            } else {
+                next(error);
             }
-            next(error);
         }
     },
     login: (req, res, next) => {

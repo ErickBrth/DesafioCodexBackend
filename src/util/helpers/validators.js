@@ -1,5 +1,7 @@
 const {EmptyFieldError} = require("../errors");
 const {InvalidArgumentError} = require("../errors");
+const validator = require('email-validator');
+const {InvalidEmailError} = require("../errors");
 
 module.exports = {
     fieldMinimumLength: (value, name, minimum) => {
@@ -14,6 +16,11 @@ module.exports = {
             if(!object[prop]) {
                 throw new EmptyFieldError(prop);
             }
+        }
+    },
+    validateEmail: (email) => {
+        if(!validator.validate(email)) {
+            throw new InvalidEmailError();
         }
     }
 }

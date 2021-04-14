@@ -3,6 +3,7 @@ const UserRepository = require('../service/Repositories/UserRepository.js');
 const passwordHelper = require('../util/helpers/passwordHelper.js');
 const AuthStrategies = require("../util/AuthStrategies.js");
 const BlackListRepository = require("../service/Repositories/BlacklistRepository.js");
+const {DuplicatedEmailError} = require("../util/errors");
 const { UserSerializer, TokenSerializer } = require('../service/Serializer');
 
 function sendResponse(res, status, result, serializer) {
@@ -28,6 +29,9 @@ module.exports = {
 
             sendResponse(res, 201, result, new UserSerializer(res.getHeader('Content-Type')));
         } catch (error) {
+            if(error.code === 11000) {
+                next(new DuplicatedEmailError());
+            }
             next(error);
         }
     },

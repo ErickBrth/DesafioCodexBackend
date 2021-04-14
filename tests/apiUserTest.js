@@ -80,12 +80,13 @@ describe('Create User', async () => {
     it('Email invalido', (done) => {
         const data1 = {
             "name": "Pedro",
-            "email": "email@gmail.com.br",
+            "email": "email",
             "password": "12345678"
         }
 
         function callback(error, response) {
             response.should.have.status(HTTP_CODE_BAD_REQUEST);
+            assert.equal(response.body.message, "Formato do email invalido");
             done();
         }
 
@@ -111,7 +112,7 @@ describe('Create User', async () => {
     it('Usuario Existente', (done) => {
         function callback(error, response) {
             response.should.have.status(HTTP_CODE_BAD_REQUEST);
-            assert.equal(response.body.message, 'E11000 duplicate key error dup key: { : "email1@codexjr.com.br" }');
+            assert.equal(response.body.message, 'Já existe um usuário com esse email');
             done();
         }
 

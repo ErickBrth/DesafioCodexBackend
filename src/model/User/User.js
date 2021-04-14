@@ -16,6 +16,7 @@ class User {
             email: email,
             password: password
         });
+        validator.validateEmail(email);
     }
 
     static async authenticateUser(user, password) {

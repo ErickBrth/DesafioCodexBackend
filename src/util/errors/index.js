@@ -5,5 +5,7 @@ module.exports = {
     UserNotFound: require('./UserNotFound.js'),
     WrongEmailOrPasswordError: require('./WrongEmailOrPasswordError.js'),
     EmptyFieldError: require('./EmptyFieldError.js'),
-    PriorityError: require('./PriorityError.js')
+    PriorityError: require('./PriorityError.js'),
+    InvalidEmailError: require('./InvalidEmailError.js'),
+    DuplicatedEmailError: require('./DuplicatedEmailError.js')
 }

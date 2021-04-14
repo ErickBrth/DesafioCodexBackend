@@ -9,7 +9,6 @@ const UserModel = new Schema({
             type: String,
             unique: true,
             required: true,
-            match: /^\w+([.-]?\w+)*(@codexjr.com.br)+$/
         },
         passwordHash: {
             type: String,
